@@ -45,9 +45,13 @@ function SkeletonRows() {
 }
 
 export default function InventarisClient({ initialItems = [] }) {
-  const [items, setItems] = useState(Array.isArray(initialItems) ? initialItems : []);
+  const [items, setItems] = useState(
+    Array.isArray(initialItems) ? initialItems : []
+  );
   const [status, setStatus] = useState(
-    Array.isArray(initialItems) && initialItems.length > 0 ? "success" : "loading"
+    Array.isArray(initialItems) && initialItems.length > 0
+      ? "success"
+      : "loading"
   );
 
   useEffect(() => {
@@ -74,7 +78,7 @@ export default function InventarisClient({ initialItems = [] }) {
         if (err.name === "AbortError") return;
         console.error("[InventarisClient] fetch error:", err);
         setItems([]);
-        setStatus("success");
+        setStatus("error");
       }
     }
 
@@ -111,6 +115,14 @@ export default function InventarisClient({ initialItems = [] }) {
           <tbody>
             {status === "loading" && <SkeletonRows />}
 
+            {status === "error" && (
+              <tr>
+                <td colSpan={5} className="inv-td inv-td--empty">
+                  Gagal memuat data inventaris.
+                </td>
+              </tr>
+            )}
+
             {status === "success" && items.length === 0 && (
               <tr>
                 <td colSpan={5} className="inv-td inv-td--empty">
@@ -130,7 +142,6 @@ export default function InventarisClient({ initialItems = [] }) {
                   <td className="inv-td inv-td--gambar">
                     {item.gambar ? (
                       <div className="inv-img-wrap">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={item.gambar}
                           alt={`Foto ${item.nama}`}
