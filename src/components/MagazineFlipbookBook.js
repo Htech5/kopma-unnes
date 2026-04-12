@@ -17,7 +17,7 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
   const flipBookRef = useRef(null);
 
   useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
   }, []);
 
   useEffect(() => {
