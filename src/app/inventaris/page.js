@@ -2,7 +2,6 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import InventarisClient from "./InventarisClient";
 
-
 export const revalidate = 300;
 
 const SITE_URL =
@@ -11,7 +10,6 @@ const SITE_URL =
 const API_BASE_URL =
   process.env.API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
   "";
 
 const PAGE_TITLE = "Inventaris | KOPMA UNNES";
@@ -47,7 +45,14 @@ function normalizeItems(payload) {
 
 async function getInventarisData() {
   const endpoint = getInventarisEndpoint();
-  if (!endpoint) return [];
+
+  if (!endpoint) {
+    console.error("[InventarisPage] API endpoint tidak tersedia");
+    return [];
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
 
   try {
     const res = await fetch(endpoint, {
@@ -56,10 +61,11 @@ async function getInventarisData() {
         Accept: "application/json",
       },
       next: { revalidate: 300 },
+      signal: controller.signal,
     });
 
     if (!res.ok) {
-      console.error("[InventarisPage] fetch failed:", res.status);
+      console.error("[InventarisPage] fetch failed:", res.status, endpoint);
       return [];
     }
 
@@ -68,6 +74,8 @@ async function getInventarisData() {
   } catch (error) {
     console.error("[InventarisPage] fetch error:", error);
     return [];
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
