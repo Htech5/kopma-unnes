@@ -65,7 +65,7 @@ export default function MagazineFlipbookViewer({ id }) {
     );
   }
 
-  const title = magazine.title;
+  const title = magazine.title || "Magazine";
 
   return (
     <section className="mag-viewer">
