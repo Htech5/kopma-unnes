@@ -7,25 +7,17 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
-
 export default function MagazineFlipbookBook({ pdfUrl }) {
   const [numPages, setNumPages] = useState(0);
   const [currentSpread, setCurrentSpread] = useState(0);
   const [bookWidth, setBookWidth] = useState(300);
   const [bookHeight, setBookHeight] = useState(424);
-  const [loadError, setLoadError] = useState("");
 
   const flipBookRef = useRef(null);
 
   useEffect(() => {
-    setNumPages(0);
-    setCurrentSpread(0);
-    setLoadError("");
-  }, [pdfUrl]);
+    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+  }, []);
 
   useEffect(() => {
     function handleResize() {
@@ -56,6 +48,11 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
 
   const totalSpreads = Math.ceil(numPages / 2);
 
+  const shouldRenderPage = (pageNumber) => {
+    const spreadIndex = Math.floor((pageNumber - 1) / 2);
+    return Math.abs(spreadIndex - currentSpread) <= 1;
+  };
+
   const handlePrev = () => {
     const pageFlip = flipBookRef.current?.pageFlip();
     if (pageFlip) pageFlip.flipPrev();
@@ -73,18 +70,11 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
         onLoadSuccess={({ numPages }) => {
           setNumPages(numPages);
           setCurrentSpread(0);
-          setLoadError("");
-        }}
-        onLoadError={(error) => {
-          console.error("[MagazineFlipbookBook] PDF error:", error);
-          setLoadError("Gagal memuat PDF.");
         }}
         loading={<p className="mag-viewer__status">Memuat PDF...</p>}
         error={<p className="mag-viewer__status">Gagal memuat PDF.</p>}
       >
-        {loadError ? (
-          <p className="mag-viewer__status">{loadError}</p>
-        ) : numPages > 0 ? (
+        {numPages > 0 && (
           <>
             <div className="mag-viewer__book-shell">
               <button
@@ -122,18 +112,40 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
                   disableFlipByClick={false}
                   className="mag-viewer__book"
                   onFlip={(e) => {
-                    setCurrentSpread(e.data);
+                    const spreadIndex = Math.floor((e.data || 0) / 2);
+                    setCurrentSpread(spreadIndex);
                   }}
                 >
                   {pages.map((pageNumber) => (
                     <div className="mag-viewer__page" key={pageNumber}>
-                      <Page
-                        pageNumber={pageNumber}
-                        width={bookWidth}
-                        renderTextLayer={false}
-                        renderAnnotationLayer={false}
-                        loading={<div className="mag-viewer__status">Memuat halaman...</div>}
-                      />
+                      {shouldRenderPage(pageNumber) ? (
+                        <Page
+                          pageNumber={pageNumber}
+                          width={bookWidth}
+                          renderTextLayer={false}
+                          renderAnnotationLayer={false}
+                          loading={
+                            <div className="mag-viewer__status">
+                              Memuat halaman...
+                            </div>
+                          }
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: `${bookWidth}px`,
+                            height: `${bookHeight}px`,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: "#fff",
+                          }}
+                        >
+                          <span className="mag-viewer__status">
+                            Halaman {pageNumber}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </HTMLFlipBook>
@@ -155,7 +167,7 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
               </span>
             </div>
           </>
-        ) : null}
+        )}
       </Document>
     </div>
   );
