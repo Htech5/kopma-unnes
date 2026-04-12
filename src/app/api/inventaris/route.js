@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.API_BACKEND_URL || "https://api.ukmkopmaunnes.com";
+const BACKEND_URL =
+  process.env.API_BACKEND_URL || "https://api.ukmkopmaunnes.com";
 
 function buildTargetUrl(request) {
   const incomingUrl = new URL(request.url);
@@ -14,10 +15,14 @@ function buildTargetUrl(request) {
 }
 
 export async function GET(request) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   try {
     const backendRes = await fetch(buildTargetUrl(request), {
       method: "GET",
       cache: "no-store",
+      signal: controller.signal,
       headers: {
         Accept: "application/json",
       },
@@ -41,10 +46,15 @@ export async function GET(request) {
       },
       { status: 500 }
     );
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 export async function POST(request) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   try {
     const formData = await request.formData();
 
@@ -52,6 +62,7 @@ export async function POST(request) {
       method: "POST",
       body: formData,
       cache: "no-store",
+      signal: controller.signal,
     });
 
     const raw = await backendRes.text();
@@ -72,5 +83,7 @@ export async function POST(request) {
       },
       { status: 500 }
     );
+  } finally {
+    clearTimeout(timeout);
   }
 }
