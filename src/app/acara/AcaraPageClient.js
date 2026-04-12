@@ -40,8 +40,18 @@ const acaraSchema = {
   breadcrumb: {
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://ukmkopmaunnes.com" },
-      { "@type": "ListItem", position: 2, name: "Acara", item: "https://ukmkopmaunnes.com/acara" },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://ukmkopmaunnes.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Acara",
+        item: "https://ukmkopmaunnes.com/acara",
+      },
     ],
   },
 };
@@ -51,6 +61,20 @@ const PER_PAGE = 6;
 
 function stripHtml(html = "") {
   return html.replace(/<[^>]*>/g, "");
+}
+
+function toImageUrl(path = "") {
+  if (!path) return "";
+
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+
+  if (!API_URL) {
+    return path;
+  }
+
+  return `${API_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
 function SkeletonCard() {
@@ -78,20 +102,24 @@ function EmptyState() {
 }
 
 function AcaraCard({ item }) {
+  const [imgError, setImgError] = useState(false);
+
+  const imageUrl = toImageUrl(item.foto);
   const excerpt =
     item.ringkasan ||
-    stripHtml(item.isi || "").slice(0, 160).trimEnd() + "…";
+    `${stripHtml(item.isi || "").slice(0, 160).trimEnd()}…`;
 
   return (
     <Link href={`/acara/${item.id}`} className="acara-card">
       <div className="acara-card__img-wrap">
-        {item.foto ? (
+        {imageUrl && !imgError ? (
           <Image
-            src={item.foto}
-            alt={item.judul}
+            src={imageUrl}
+            alt={item.judul || "Thumbnail acara"}
             fill
             className="acara-card__img"
             sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+            onError={() => setImgError(true)}
           />
         ) : (
           <div className="acara-card__img-placeholder">
@@ -116,13 +144,16 @@ export default function AcaraPageClient() {
 
   const load = useCallback(async (p) => {
     setStatus("loading");
+
     try {
       const res = await fetch(`${API_URL}/api/acara?page=${p}&limit=${PER_PAGE}`, {
         cache: "no-store",
         headers: { Accept: "application/json" },
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
 
       const json = await res.json();
 
@@ -154,6 +185,7 @@ export default function AcaraPageClient() {
     <>
       <JsonLd data={acaraSchema} />
       <Navbar />
+
       <main className="acara-page keanggotaan-page--flush">
         <section>
           <div className="acara-section__inner">
@@ -195,7 +227,9 @@ export default function AcaraPageClient() {
                         <button
                           key={i}
                           role="listitem"
-                          className={`acara-pagination__dot${page === i + 1 ? " is-active" : ""}`}
+                          className={`acara-pagination__dot${
+                            page === i + 1 ? " is-active" : ""
+                          }`}
                           onClick={() => goTo(i + 1)}
                           aria-label={`Halaman ${i + 1}`}
                           aria-current={page === i + 1 ? "page" : undefined}
@@ -225,6 +259,7 @@ export default function AcaraPageClient() {
           </div>
         </section>
       </main>
+
       <Footer />
     </>
   );
