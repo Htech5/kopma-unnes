@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.API_BACKEND_URL || "https://api.ukmkopmaunnes.com";
+const BACKEND_URL =
+  process.env.API_BACKEND_URL || "https://api.ukmkopmaunnes.com";
 
 export async function GET(_, context) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   try {
     const { id } = await context.params;
 
@@ -12,6 +16,7 @@ export async function GET(_, context) {
         Accept: "application/json",
       },
       cache: "no-store",
+      signal: controller.signal,
     });
 
     const raw = await backendRes.text();
@@ -32,10 +37,15 @@ export async function GET(_, context) {
       },
       { status: 500 }
     );
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 export async function PUT(request, context) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   try {
     const { id } = await context.params;
     const formData = await request.formData();
@@ -44,6 +54,7 @@ export async function PUT(request, context) {
       method: "PUT",
       body: formData,
       cache: "no-store",
+      signal: controller.signal,
     });
 
     const raw = await backendRes.text();
@@ -64,10 +75,15 @@ export async function PUT(request, context) {
       },
       { status: 500 }
     );
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 export async function DELETE(_, context) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   try {
     const { id } = await context.params;
 
@@ -77,6 +93,7 @@ export async function DELETE(_, context) {
         Accept: "application/json",
       },
       cache: "no-store",
+      signal: controller.signal,
     });
 
     const raw = await backendRes.text();
@@ -97,5 +114,7 @@ export async function DELETE(_, context) {
       },
       { status: 500 }
     );
+  } finally {
+    clearTimeout(timeout);
   }
 }
