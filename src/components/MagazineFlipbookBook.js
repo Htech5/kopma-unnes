@@ -7,18 +7,25 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
+
 export default function MagazineFlipbookBook({ pdfUrl }) {
   const [numPages, setNumPages] = useState(0);
   const [currentSpread, setCurrentSpread] = useState(0);
   const [bookWidth, setBookWidth] = useState(300);
   const [bookHeight, setBookHeight] = useState(424);
+  const [loadError, setLoadError] = useState("");
 
   const flipBookRef = useRef(null);
 
   useEffect(() => {
-    // Pindah ke sini agar hanya jalan di browser
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
-  }, []);
+    setNumPages(0);
+    setCurrentSpread(0);
+    setLoadError("");
+  }, [pdfUrl]);
 
   useEffect(() => {
     function handleResize() {
@@ -66,11 +73,18 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
         onLoadSuccess={({ numPages }) => {
           setNumPages(numPages);
           setCurrentSpread(0);
+          setLoadError("");
+        }}
+        onLoadError={(error) => {
+          console.error("[MagazineFlipbookBook] PDF error:", error);
+          setLoadError("Gagal memuat PDF.");
         }}
         loading={<p className="mag-viewer__status">Memuat PDF...</p>}
         error={<p className="mag-viewer__status">Gagal memuat PDF.</p>}
       >
-        {numPages > 0 && (
+        {loadError ? (
+          <p className="mag-viewer__status">{loadError}</p>
+        ) : numPages > 0 ? (
           <>
             <div className="mag-viewer__book-shell">
               <button
@@ -118,6 +132,7 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
                         width={bookWidth}
                         renderTextLayer={false}
                         renderAnnotationLayer={false}
+                        loading={<div className="mag-viewer__status">Memuat halaman...</div>}
                       />
                     </div>
                   ))}
@@ -140,7 +155,7 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
               </span>
             </div>
           </>
-        )}
+        ) : null}
       </Document>
     </div>
   );
