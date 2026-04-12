@@ -4,7 +4,8 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  output: 'standalone',
+  output: "standalone",
+
   images: {
     formats: ["image/avif", "image/webp"],
     dangerouslyAllowLocalIP: true,
@@ -13,6 +14,16 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
         port: "3001",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.ukmkopmaunnes.com",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ukmkopmaunnes.com",
         pathname: "/uploads/**",
       },
     ],
