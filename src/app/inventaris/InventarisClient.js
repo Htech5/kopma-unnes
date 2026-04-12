@@ -57,17 +57,29 @@ export default function InventarisClient({ initialItems = [] }) {
   useEffect(() => {
     if (Array.isArray(initialItems) && initialItems.length > 0) return;
 
+    if (!API_URL) {
+      console.error("[InventarisClient] NEXT_PUBLIC_API_URL belum di-set");
+      setItems([]);
+      setStatus("error");
+      return;
+    }
+
     const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
 
     async function load() {
       try {
         const res = await fetch(`${API_URL}/api/inventaris`, {
           signal: controller.signal,
-          headers: { Accept: "application/json" },
+          headers: {
+            Accept: "application/json",
+          },
           cache: "no-store",
         });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
 
         const json = await res.json();
         const list = Array.isArray(json) ? json : json.data ?? json.items ?? [];
@@ -75,15 +87,24 @@ export default function InventarisClient({ initialItems = [] }) {
         setItems(Array.isArray(list) ? list : []);
         setStatus("success");
       } catch (err) {
-        if (err.name === "AbortError") return;
-        console.error("[InventarisClient] fetch error:", err);
+        if (err.name === "AbortError") {
+          console.error("[InventarisClient] request timeout");
+        } else {
+          console.error("[InventarisClient] fetch error:", err);
+        }
         setItems([]);
         setStatus("error");
+      } finally {
+        clearTimeout(timeout);
       }
     }
 
     load();
-    return () => controller.abort();
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
   }, [initialItems]);
 
   const waHref = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MSG)}`;
