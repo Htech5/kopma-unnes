@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LatestActivitySection from "../components/LatestActivitySection";
 import LatestMagazineSection from "../components/LatestMagazineSection";
+import StatistikSection from "../components/StatistikSection";
 import PeranKamiSection from "../components/PeranKamiSection";
 import UnitUsahaSection from "../components/UnitUsahaSection";
 import JsonLd from "@/components/JsonLd";
@@ -156,6 +157,7 @@ export default function HomePage() {
         </section>
 
         <LatestMagazineSection />
+        <StatistikSection />
         <PeranKamiSection />
         <UnitUsahaSection />
       </main>
