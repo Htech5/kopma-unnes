@@ -63,7 +63,9 @@ export default function UnitUsahaSection() {
 
   const toggleCard = (id) => {
     setOpenCardIds((prev) =>
-      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
+      prev.includes(id)
+        ? prev.filter((itemId) => itemId !== id)
+        : [...prev, id]
     );
   };
 
@@ -134,7 +136,7 @@ export default function UnitUsahaSection() {
                     className="unit-usaha__panel-actions"
                     onClick={(event) => event.stopPropagation()}
                   >
-                    
+                    <a
                       href={item.locationHref}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -143,7 +145,7 @@ export default function UnitUsahaSection() {
                       <span>See Our Location</span>
                     </a>
 
-                    
+                    <a
                       href={waHref}
                       target="_blank"
                       rel="noopener noreferrer"
