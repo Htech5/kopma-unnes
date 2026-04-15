@@ -18,7 +18,7 @@ const unitUsahaItems = [
   {
     id: "kopmart",
     title: "KOPMART",
-    description: "Sedia kebutuhan harian.",
+    description: "Sedia kebutuhan sehari - hari.",
     logo: "/images/kopmart-logo.png",
     detailsHref: "/kopmart",
     locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
