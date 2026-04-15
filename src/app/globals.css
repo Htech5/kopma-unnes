@@ -907,6 +907,124 @@ select {
 }
 
 /* =========================
+   STATISTIK KAMI
+========================= */
+
+.statistik-kami {
+  padding: 18px 28px 10px;
+  background-color: #efefef;
+}
+
+.statistik-kami__inner {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 26px;
+  min-height: 280px;
+  isolation: isolate;
+}
+
+.statistik-kami__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.statistik-kami__background-image {
+  object-fit: cover;
+  filter: grayscale(1) brightness(1.08);
+  opacity: 0.18;
+}
+
+.statistik-kami__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.statistik-kami__grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: center;
+  min-height: 280px;
+  padding: 36px 24px;
+}
+
+.statistik-kami__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px 8px;
+}
+
+.statistik-kami__number {
+  font-size: clamp(52px, 8vw, 86px);
+  line-height: 1;
+  font-weight: 800;
+  color: #6b3c5f;
+  letter-spacing: -0.03em;
+  margin-bottom: 28px;
+}
+
+.statistik-kami__label {
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.2;
+  font-weight: 800;
+  color: #2f3f3b;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 992px) {
+  .statistik-kami__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: auto;
+    padding: 34px 20px;
+    gap: 28px 18px;
+  }
+
+  .statistik-kami__number {
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .statistik-kami {
+    padding: 14px 16px 6px;
+  }
+
+  .statistik-kami__inner {
+    border-radius: 20px;
+  }
+
+  .statistik-kami__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 26px 14px;
+    gap: 24px 12px;
+  }
+
+  .statistik-kami__item {
+    padding: 8px 4px;
+  }
+
+  .statistik-kami__number {
+    font-size: clamp(42px, 12vw, 60px);
+    margin-bottom: 10px;
+  }
+
+  .statistik-kami__label {
+    font-size: 15px;
+    letter-spacing: 0.03em;
+  }
+}
+
+/* =========================
    PERAN KAMI
 ========================= */
 
