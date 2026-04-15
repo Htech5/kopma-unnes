@@ -167,7 +167,7 @@ export default function JneKopmaPage() {
               </h1>
 
               <a
-                href="https://maps.app.goo.gl/s51EG4NFcNkJkARK6"
+                href="https://wa.me/628979979356"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="jne-hero__cta"
