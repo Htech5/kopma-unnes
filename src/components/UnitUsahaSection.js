@@ -20,7 +20,7 @@ const unitUsahaItems = [
     description: "Menyediakan beraneka ragam kebutuhan sehari-hari.",
     logo: "/images/kopmart-logo.png",
     detailsHref: "/kopmart",
-    locationHref: "https://maps.app.goo.gl/s51EG4NFcNkJkARK6",
+    locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
     showDetails: true,
   },
   {
@@ -29,7 +29,7 @@ const unitUsahaItems = [
     description: "Menyediakan persewaan dan pembelian toga wisuda.",
     logo: "/images/toga-logo.png",
     detailsHref: "/toga-kopma",
-    locationHref: "https://maps.app.goo.gl/2ByFA8iL2E34zbDh7",
+    locationHref: "https://maps.app.goo.gl/2daKNnHjMVdNrAx38",
     showDetails: true,
   },
   {
@@ -39,7 +39,7 @@ const unitUsahaItems = [
       "Menyediakan penitipan barang yang dititipkan oleh anggota untuk diperjual-belikan (jual-titip).",
     logo: "/images/konsinyasi-logo.png",
     detailsHref: "/konsinyasi-kopma",
-    locationHref: "https://maps.app.goo.gl/WEkbMTsMebZr43GL7",
+    locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
     showDetails: false,
   },
   {
@@ -48,7 +48,7 @@ const unitUsahaItems = [
     description: "Usaha baru kuliner.",
     logo: "/images/kws-logo.png",
     detailsHref: "/kws-kopma",
-    locationHref: "https://maps.app.goo.gl/WEkbMTsMebZr43GL7",
+    locationHref: "https://maps.app.goo.gl/2daKNnHjMVdNrAx38",
     showDetails: false,
   },
 ];
