@@ -5,15 +5,15 @@ import Image from "next/image";
 
 const statsData = [
   {
-    value: 290,
+    value: 265,
     label: "Anggota",
   },
   {
-    value: 17,
+    value: 19,
     label: "Pengurus",
   },
   {
-    value: 44,
+    value: 19,
     label: "Staf",
   },
   {
