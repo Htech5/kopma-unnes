@@ -139,11 +139,6 @@ export default function UnitUsahaSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="unit-usaha__action unit-usaha__action--location"
-                      onClick={(event) => {
-                        if (item.locationHref === "#") {
-                          event.preventDefault();
-                        }
-                      }}
                     >
                       <span>See Our Location</span>
                     </a>
