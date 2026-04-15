@@ -18,7 +18,7 @@ const unitUsahaItems = [
   {
     id: "kopmart",
     title: "KOPMART",
-    description: "Menyediakan beraneka ragam kebutuhan sehari-hari.",
+    description: "Sedia kebutuhan harian.",
     logo: "/images/kopmart-logo.png",
     detailsHref: "/kopmart",
     locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
@@ -28,7 +28,7 @@ const unitUsahaItems = [
   {
     id: "toga",
     title: "Toga Wisuda",
-    description: "Menyediakan persewaan dan pembelian toga wisuda.",
+    description: "Persewaan dan pembelian toga.",
     logo: "/images/toga-logo.png",
     detailsHref: "/toga-kopma",
     locationHref: "https://maps.app.goo.gl/2daKNnHjMVdNrAx38",
@@ -39,7 +39,7 @@ const unitUsahaItems = [
     id: "konsinyasi",
     title: "Konsinyasi KOPMA",
     description:
-      "Menyediakan penitipan barang yang dititipkan oleh anggota untuk diperjual-belikan.",
+      "Penitipan barang anggota untuk dijual.",
     logo: "/images/konsinyasi-logo.png",
     detailsHref: "/konsinyasi-kopma",
     locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
