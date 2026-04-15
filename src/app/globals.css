@@ -1064,10 +1064,10 @@ select {
 
 .unit-usaha {
   position: relative;
-  padding: 28px 24px 220px;
+  padding: 28px 24px 320px;
   overflow: visible;
   background-color: #efefef;
-  min-height: 1600px;
+  min-height: 2000px;
 }
 
 .unit-usaha::before {
