@@ -39,7 +39,7 @@ const unitUsahaItems = [
     id: "konsinyasi",
     title: "Konsinyasi KOPMA",
     description:
-      "Menyediakan penitipan barang yang dititipkan oleh anggota untuk diperjual-belikan (jual-titip).",
+      "Menyediakan penitipan barang yang dititipkan oleh anggota untuk diperjual-belikan.",
     logo: "/images/konsinyasi-logo.png",
     detailsHref: "/konsinyasi-kopma",
     locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
