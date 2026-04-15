@@ -186,6 +186,12 @@ export default function KopmartPage() {
                 className="kopmart-hero__tag"
                 aria-label="Informasi layanan KOPMART"
               >
+              <a
+                href="https://wa.me/6285124573261"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="jne-hero__cta"
+              >
                 <span className="kopmart-hero__tag-main">Hubungi Kami</span>
                 <span className="kopmart-hero__tag-icon">➜</span>
               </div>
