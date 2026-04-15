@@ -194,6 +194,7 @@ export default function KopmartPage() {
               >
                 <span className="kopmart-hero__tag-main">Hubungi Kami</span>
                 <span className="kopmart-hero__tag-icon">➜</span>
+              </a>
               </div>
             </div>
           </div>
