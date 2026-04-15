@@ -233,9 +233,10 @@ export default function TogaKopmaPage() {
               <h1 className="toga-hero__title">TOGA</h1>
 
               <a
-                href="#toga-services"
-                className="toga-hero__cta"
-                aria-label="Lihat layanan toga"
+                href="https://wa.me/6285124573261"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="jne-hero__cta"
               >
                 <span>Hubungi Kami</span>
                 <span className="toga-hero__cta-icon">➜</span>
