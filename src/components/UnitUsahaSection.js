@@ -12,6 +12,7 @@ const unitUsahaItems = [
     logo: "/images/JNE-logo.png",
     detailsHref: "/jne-kopma",
     locationHref: "https://maps.app.goo.gl/s51EG4NFcNkJkARK6",
+    waNumber: "6281234567890",
     showDetails: true,
   },
   {
@@ -21,6 +22,7 @@ const unitUsahaItems = [
     logo: "/images/kopmart-logo.png",
     detailsHref: "/kopmart",
     locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
+    waNumber: "6282345678901",
     showDetails: true,
   },
   {
@@ -30,6 +32,7 @@ const unitUsahaItems = [
     logo: "/images/toga-logo.png",
     detailsHref: "/toga-kopma",
     locationHref: "https://maps.app.goo.gl/2daKNnHjMVdNrAx38",
+    waNumber: "6283456789012",
     showDetails: true,
   },
   {
@@ -40,6 +43,7 @@ const unitUsahaItems = [
     logo: "/images/konsinyasi-logo.png",
     detailsHref: "/konsinyasi-kopma",
     locationHref: "https://maps.app.goo.gl/1zKniu75Z8Ck56M36",
+    waNumber: "6284567890123",
     showDetails: false,
   },
   {
@@ -49,6 +53,7 @@ const unitUsahaItems = [
     logo: "/images/kws-logo.png",
     detailsHref: "/kws-kopma",
     locationHref: "https://maps.app.goo.gl/2daKNnHjMVdNrAx38",
+    waNumber: "6285678901234",
     showDetails: false,
   },
 ];
@@ -84,6 +89,7 @@ export default function UnitUsahaSection() {
         <div className="unit-usaha__grid">
           {unitUsahaItems.map((item) => {
             const isOpen = openCardIds.includes(item.id);
+            const waHref = `https://wa.me/${item.waNumber}?text=Halo,%20saya%20ingin%20bertanya%20tentang%20${encodeURIComponent(item.title)}`;
 
             return (
               <article
@@ -128,7 +134,7 @@ export default function UnitUsahaSection() {
                     className="unit-usaha__panel-actions"
                     onClick={(event) => event.stopPropagation()}
                   >
-                    <a
+                    
                       href={item.locationHref}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -140,6 +146,15 @@ export default function UnitUsahaSection() {
                       }}
                     >
                       <span>See Our Location</span>
+                    </a>
+
+                    
+                      href={waHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="unit-usaha__action unit-usaha__action--details"
+                    >
+                      <span>Contact Us</span>
                     </a>
 
                     {item.showDetails ? (
