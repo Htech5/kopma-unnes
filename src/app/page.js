@@ -1,14 +1,34 @@
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LatestActivitySection from "../components/LatestActivitySection";
-import LatestMagazineSection from "../components/LatestMagazineSection";
-import StatistikSection from "../components/StatistikSection";
-import PeranKamiSection from "../components/PeranKamiSection";
-import UnitUsahaSection from "../components/UnitUsahaSection";
 import LazySection from "../components/LazySection";
 import JsonLd from "@/components/JsonLd";
+
+const LatestMagazineSection = dynamic(
+  () => import("../components/LatestMagazineSection"),
+  { ssr: false }
+);
+
+const StatistikSection = dynamic(
+  () => import("../components/StatistikSection"),
+  { ssr: false }
+);
+
+const PeranKamiSection = dynamic(
+  () => import("../components/PeranKamiSection"),
+  { ssr: false }
+);
+
+const UnitUsahaSection = dynamic(
+  () => import("../components/UnitUsahaSection"),
+  { ssr: false }
+);
+
+export const revalidate = 3600;
 
 export const metadata = {
   title: "KOPMA UNNES – Koperasi Mahasiswa Universitas Negeri Semarang",
@@ -30,7 +50,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "https://ukmkopmaunnes.com/images/BANGUNGAN.png",
+        url: "https://ukmkopmaunnes.com/images/BANGUNGAN.webp",
         width: 1200,
         height: 630,
         alt: "Gedung KOPMA UNNES – Koperasi Mahasiswa Universitas Negeri Semarang",
@@ -42,7 +62,7 @@ export const metadata = {
     title: "KOPMA UNNES – Koperasi Mahasiswa Universitas Negeri Semarang",
     description:
       "KOPMA UNNES melayani mahasiswa UNNES melalui berbagai unit usaha: KOPMART, Counter JNE, Toga Wisuda, dan lebih banyak lagi.",
-    images: ["https://ukmkopmaunnes.com/images/BANGUNGAN.png"],
+    images: ["https://ukmkopmaunnes.com/images/BANGUNGAN.webp"],
   },
   alternates: {
     canonical: "https://ukmkopmaunnes.com",
@@ -105,7 +125,7 @@ export default function HomePage() {
         <section className="utama-shared" aria-labelledby="utama-hero-title">
           <div className="utama-shared__background" aria-hidden="true">
             <Image
-              src="/images/BANGUNGAN.png"
+              src="/images/BANGUNGAN.webp"
               alt=""
               fill
               priority
@@ -143,7 +163,7 @@ export default function HomePage() {
               <div className="utama-hero__visual" aria-hidden="true">
                 <div className="utama-hero__maskot">
                   <Image
-                    src="/images/MASKOT.png"
+                    src="/images/MASKOT.webp"
                     alt=""
                     fill
                     sizes="(max-width: 992px) 250px, 360px"
