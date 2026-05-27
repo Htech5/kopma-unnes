@@ -1,32 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LatestActivitySection from "../components/LatestActivitySection";
-import LazySection from "../components/LazySection";
+import HomeLazySections from "../components/HomeLazySections";
 import JsonLd from "@/components/JsonLd";
-
-const LatestMagazineSection = dynamic(
-  () => import("../components/LatestMagazineSection"),
-  { ssr: false }
-);
-
-const StatistikSection = dynamic(
-  () => import("../components/StatistikSection"),
-  { ssr: false }
-);
-
-const PeranKamiSection = dynamic(
-  () => import("../components/PeranKamiSection"),
-  { ssr: false }
-);
-
-const UnitUsahaSection = dynamic(
-  () => import("../components/UnitUsahaSection"),
-  { ssr: false }
-);
 
 export const revalidate = 3600;
 
@@ -178,21 +157,7 @@ export default function HomePage() {
           <LatestActivitySection />
         </section>
 
-        <LazySection minHeight={400}>
-          <LatestMagazineSection />
-        </LazySection>
-
-        <LazySection minHeight={300}>
-          <StatistikSection />
-        </LazySection>
-
-        <LazySection minHeight={400}>
-          <PeranKamiSection />
-        </LazySection>
-
-        <LazySection minHeight={400}>
-          <UnitUsahaSection />
-        </LazySection>
+        <HomeLazySections />
       </main>
 
       <Footer />
