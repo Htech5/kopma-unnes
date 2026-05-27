@@ -75,7 +75,8 @@ export default function UnitUsahaSection() {
         <Image
           src="/images/background-usaha.png"
           alt=""
-          fill
+          width={1920}
+          height={1450}
           className="unit-usaha__background-image"
           sizes="100vw"
         />
