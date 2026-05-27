@@ -1204,6 +1204,7 @@ select {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
 }
 
 .unit-usaha__background-image {
@@ -1449,9 +1450,21 @@ select {
 
 @media (max-width: 640px) {
   .unit-usaha {
-    padding: 24px 16px 60px;
     height: 1200px;
     min-height: 1200px;
+    padding: 24px 16px 60px;
+    overflow: hidden;
+  }
+
+  .unit-usaha__background {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .unit-usaha__background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .unit-usaha__title {
@@ -1504,7 +1517,6 @@ select {
     font-size: 11px;
   }
 }
-
 
 /* =========================
    JNE KOPMA PAGE
