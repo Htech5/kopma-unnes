@@ -1185,11 +1185,10 @@ select {
   padding: 28px 24px 160px;
   height: 800px;
   overflow: hidden;
-  background-color: transparent;
+  background-color: #006b24;
 }
 
 .unit-usaha::before {
-  display: none;
   content: none;
 }
 
@@ -1198,19 +1197,20 @@ select {
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background-color: #006b24;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(5, 120, 38, 0.9) 0%,
+      rgba(0, 105, 34, 0.94) 100%
+    ),
+    url("/images/background-usaha.png");
+  background-size: 100% 100%, 100% 100%;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
 }
 
 .unit-usaha__background-image {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  object-fit: cover !important;
-  object-position: center top;
-  opacity: 0.35;
-  filter: saturate(1);
+  display: none !important;
 }
 
 .unit-usaha__inner {
@@ -1447,23 +1447,12 @@ select {
   }
 }
 
-@media (max-width: 640px) {
+@media screen and (max-width: 640px) {
   .unit-usaha {
     height: 1450px;
     min-height: 1450px;
     padding: 24px 16px 60px;
     overflow: hidden;
-    background-color: transparent;
-  }
-
-  .unit-usaha__background {
-    height: 100%;
-  }
-
-  .unit-usaha__background-image {
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center top;
   }
 
   .unit-usaha__title {
