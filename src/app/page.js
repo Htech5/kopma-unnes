@@ -7,6 +7,7 @@ import LatestMagazineSection from "../components/LatestMagazineSection";
 import StatistikSection from "../components/StatistikSection";
 import PeranKamiSection from "../components/PeranKamiSection";
 import UnitUsahaSection from "../components/UnitUsahaSection";
+import LazySection from "../components/LazySection";
 import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
@@ -109,6 +110,7 @@ export default function HomePage() {
               fill
               priority
               sizes="100vw"
+              quality={60}
               className="utama-shared__building"
             />
           </div>
@@ -144,8 +146,8 @@ export default function HomePage() {
                     src="/images/MASKOT.png"
                     alt=""
                     fill
-                    priority
                     sizes="(max-width: 992px) 250px, 360px"
+                    quality={70}
                     className="utama-hero__maskot-image"
                   />
                 </div>
@@ -156,10 +158,21 @@ export default function HomePage() {
           <LatestActivitySection />
         </section>
 
-        <LatestMagazineSection />
-        <StatistikSection />
-        <PeranKamiSection />
-        <UnitUsahaSection />
+        <LazySection minHeight={400}>
+          <LatestMagazineSection />
+        </LazySection>
+
+        <LazySection minHeight={300}>
+          <StatistikSection />
+        </LazySection>
+
+        <LazySection minHeight={400}>
+          <PeranKamiSection />
+        </LazySection>
+
+        <LazySection minHeight={400}>
+          <UnitUsahaSection />
+        </LazySection>
       </main>
 
       <Footer />
