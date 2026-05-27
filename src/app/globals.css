@@ -1450,13 +1450,15 @@ select {
 
 @media (max-width: 640px) {
   .unit-usaha {
-    height: 1200px;
+    height: auto;
     min-height: 1200px;
     padding: 24px 16px 60px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .unit-usaha__background {
+    position: absolute;
+    inset: 0;
     height: 100%;
     overflow: hidden;
   }
