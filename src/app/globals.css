@@ -1198,7 +1198,7 @@ select {
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background: transparent;
+  background-color: #006b24;
 }
 
 .unit-usaha__background-image {
@@ -1208,8 +1208,10 @@ select {
   max-width: none;
   object-fit: cover;
   object-position: center top;
-  opacity: 1;
-  filter: sepia(1) saturate(2.5) hue-rotate(65deg) brightness(0.5);
+
+  /* motif jadi putih */
+  filter: brightness(0) invert(1);
+  opacity: 0.28;
 }
 
 .unit-usaha__inner {
