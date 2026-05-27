@@ -1183,7 +1183,7 @@ select {
 .unit-usaha {
   position: relative;
   padding: 28px 24px 160px;
-  height: 800px;
+  height: 650px;
   overflow: hidden;
   background-color: #efefef;
 }
@@ -1452,7 +1452,7 @@ select {
   .unit-usaha {
     height: auto;
     min-height: 1200px;
-    padding: 24px 16px 60px;
+    padding: 24px 16px 100px;
     overflow: visible;
   }
 
