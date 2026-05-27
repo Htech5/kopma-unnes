@@ -1208,7 +1208,7 @@ select {
   width: 100% !important;
   height: 100% !important;
   max-width: none !important;
-  object-fit: fill !important;
+  object-fit: cover !important;
   object-position: center top;
   opacity: 0.35;
   filter: saturate(1);
