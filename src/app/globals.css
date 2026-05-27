@@ -6147,7 +6147,7 @@ select {
   .unit-usaha {
     padding-top: 24px;
     padding-bottom: 120px;
-    min-height: 800px;
+    min-height: auto;
   }
 
   .unit-usaha__title {
