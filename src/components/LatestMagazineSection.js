@@ -1,19 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
-function isSafeImageUrl(value) {
-  if (typeof value !== "string" || !value.trim()) return false;
-
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" || url.protocol === "http:";
-  } catch {
-    return value.startsWith("/");
-  }
-}
+const LatestMagazinePreview = dynamic(
+  () => import("./LatestMagazinePreview"),
+  { ssr: false }
+);
 
 export default function LatestMagazineSection() {
   const [magazine, setMagazine] = useState(null);
@@ -41,22 +35,9 @@ export default function LatestMagazineSection() {
 
         if (!isMounted) return;
 
-        if (!data || typeof data !== "object") {
-          throw new Error("Response API bukan object yang valid.");
-        }
-
-        if (typeof data.id !== "number" && typeof data.id !== "string") {
-          throw new Error("id magazine tidak valid.");
-        }
-
-        if (typeof data.title !== "string" || !data.title.trim()) {
-          throw new Error("title magazine tidak valid.");
-        }
-
         setMagazine({
           id: data.id,
           title: data.title.trim(),
-          coverUrl: isSafeImageUrl(data.coverUrl) ? data.coverUrl : null,
         });
       } catch (error) {
         console.error("Gagal mengambil data latest magazine:", error);
@@ -111,19 +92,7 @@ export default function LatestMagazineSection() {
           <>
             <div className="utama-magazine__cover">
               <div className="utama-magazine__cover-inner">
-                {magazine.coverUrl ? (
-                  <Image
-                    src={magazine.coverUrl}
-                    alt={`Cover majalah ${magazine.title}`}
-                    width={250}
-                    height={350}
-                    className="utama-magazine__cover-image"
-                    sizes="250px"
-                    unoptimized
-                  />
-                ) : (
-                  <div className="utama-magazine__loading-cover" />
-                )}
+                <LatestMagazinePreview id={magazine.id} />
               </div>
             </div>
 
