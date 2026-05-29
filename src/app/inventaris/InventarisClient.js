@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 const WA_NUMBER = process.env.NEXT_PUBLIC_WA_NUMBER ?? "6282146734835";
 const WA_MSG =
   process.env.NEXT_PUBLIC_WA_MSG ??
   "Halo, saya ingin menyewa inventaris KOPMA UNNES.";
+
+const PAGE_SIZE_OPTIONS = [6, 12, 24, 48];
 
 function formatHarga(val) {
   if (val === null || val === undefined || val === "") return "—";
@@ -22,8 +23,8 @@ function safeNumber(val) {
   return Number.isFinite(n) ? n : "—";
 }
 
-function SkeletonRows() {
-  return Array.from({ length: 6 }).map((_, i) => (
+function SkeletonRows({ count = 6 }) {
+  return Array.from({ length: count }).map((_, i) => (
     <tr key={i} className={`inv-row${i % 2 !== 0 ? " inv-row--alt" : ""}`}>
       <td className="inv-td inv-td--nama">
         <div className="inv-skel inv-skel--text" />
@@ -54,27 +55,24 @@ export default function InventarisClient({ initialItems = [] }) {
       : "loading"
   );
 
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
+
   useEffect(() => {
     if (Array.isArray(initialItems) && initialItems.length > 0) return;
-
-    if (!API_URL) {
-      console.error("[InventarisClient] NEXT_PUBLIC_API_URL belum di-set");
-      setItems([]);
-      setStatus("error");
-      return;
-    }
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
 
     async function load() {
       try {
-        const res = await fetch(`${API_URL}/api/inventaris`, {
+        setStatus("loading");
+
+        const res = await fetch("/api/inventaris", {
           signal: controller.signal,
           headers: {
             Accept: "application/json",
           },
-          cache: "no-store",
         });
 
         if (!res.ok) {
@@ -92,6 +90,7 @@ export default function InventarisClient({ initialItems = [] }) {
         } else {
           console.error("[InventarisClient] fetch error:", err);
         }
+
         setItems([]);
         setStatus("error");
       } finally {
@@ -107,7 +106,32 @@ export default function InventarisClient({ initialItems = [] }) {
     };
   }, [initialItems]);
 
+  const totalItems = items.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+  const paginatedItems = useMemo(() => {
+    const safePage = Math.min(page, totalPages);
+    const start = (safePage - 1) * pageSize;
+    return items.slice(start, start + pageSize);
+  }, [items, page, pageSize, totalPages]);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
   const waHref = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MSG)}`;
+
+  function handlePageSizeChange(e) {
+    setPageSize(Number(e.target.value));
+    setPage(1);
+  }
+
+  function goToPage(targetPage) {
+    const nextPage = Math.min(Math.max(targetPage, 1), totalPages);
+    setPage(nextPage);
+  }
 
   return (
     <div className="inv-wrap">
@@ -116,6 +140,32 @@ export default function InventarisClient({ initialItems = [] }) {
         <br />
         KOPMA UNNES
       </h1>
+
+      {status === "success" && items.length > 0 && (
+        <div className="inv-pagination-control">
+          <label className="inv-pagination-label">
+            Tampilkan
+            <select
+              value={pageSize}
+              onChange={handlePageSizeChange}
+              className="inv-pagination-select"
+              aria-label="Jumlah inventaris per halaman"
+            >
+              {PAGE_SIZE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            data per halaman
+          </label>
+
+          <p className="inv-pagination-info">
+            Menampilkan {(page - 1) * pageSize + 1}-
+            {Math.min(page * pageSize, totalItems)} dari {totalItems} data
+          </p>
+        </div>
+      )}
 
       <div className="inv-table-wrap" role="region" aria-label="Daftar inventaris">
         <table className="inv-table">
@@ -134,7 +184,7 @@ export default function InventarisClient({ initialItems = [] }) {
           </thead>
 
           <tbody>
-            {status === "loading" && <SkeletonRows />}
+            {status === "loading" && <SkeletonRows count={Math.min(pageSize, 12)} />}
 
             {status === "error" && (
               <tr>
@@ -153,7 +203,7 @@ export default function InventarisClient({ initialItems = [] }) {
             )}
 
             {status === "success" &&
-              items.map((item, i) => (
+              paginatedItems.map((item, i) => (
                 <tr
                   key={item.id ?? i}
                   className={`inv-row${i % 2 !== 0 ? " inv-row--alt" : ""}`}
@@ -195,6 +245,48 @@ export default function InventarisClient({ initialItems = [] }) {
           </tbody>
         </table>
       </div>
+
+      {status === "success" && items.length > 0 && totalPages > 1 && (
+        <nav className="inv-pagination" aria-label="Navigasi halaman inventaris">
+          <button
+            type="button"
+            className="inv-pagination-btn"
+            onClick={() => goToPage(page - 1)}
+            disabled={page <= 1}
+          >
+            ← Sebelumnya
+          </button>
+
+          <div className="inv-pagination-pages">
+            {Array.from({ length: totalPages }).map((_, index) => {
+              const pageNumber = index + 1;
+
+              return (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  className={`inv-pagination-number${
+                    pageNumber === page ? " is-active" : ""
+                  }`}
+                  onClick={() => goToPage(pageNumber)}
+                  aria-current={pageNumber === page ? "page" : undefined}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            className="inv-pagination-btn"
+            onClick={() => goToPage(page + 1)}
+            disabled={page >= totalPages}
+          >
+            Berikutnya →
+          </button>
+        </nav>
+      )}
 
       <div className="inv-wa-outer">
         <a
