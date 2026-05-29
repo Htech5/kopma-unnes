@@ -375,6 +375,10 @@ select {
   margin-top: -4px;
 }
 
+.footer-map--placeholder {
+  background: #e5e7eb;
+}
+
 /* =========================
    HOME / UTAMA
 ========================= */
