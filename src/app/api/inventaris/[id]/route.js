@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const revalidate = 3600;
+
 const BACKEND_URL =
   process.env.API_BACKEND_URL || "https://api.ukmkopmaunnes.com";
 
@@ -15,8 +17,10 @@ export async function GET(_, context) {
       headers: {
         Accept: "application/json",
       },
-      cache: "no-store",
       signal: controller.signal,
+      next: {
+        revalidate: 3600,
+      },
     });
 
     const raw = await backendRes.text();
@@ -26,10 +30,13 @@ export async function GET(_, context) {
       headers: {
         "Content-Type":
           backendRes.headers.get("content-type") || "application/json",
+        "Cache-Control":
+          "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
   } catch (error) {
     console.error("PROXY GET /api/inventaris/[id] error:", error);
+
     return NextResponse.json(
       {
         message: "Proxy gagal mengambil detail inventaris",
@@ -68,6 +75,7 @@ export async function PUT(request, context) {
     });
   } catch (error) {
     console.error("PROXY PUT /api/inventaris/[id] error:", error);
+
     return NextResponse.json(
       {
         message: "Proxy gagal memperbarui inventaris",
@@ -107,6 +115,7 @@ export async function DELETE(_, context) {
     });
   } catch (error) {
     console.error("PROXY DELETE /api/inventaris/[id] error:", error);
+
     return NextResponse.json(
       {
         message: "Proxy gagal menghapus inventaris",
