@@ -5,6 +5,8 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "https://ukmkopmaunnes.com";
 
+export const revalidate = 3600;
+
 export async function GET() {
   try {
     const targetUrl = new URL("/api/acara?page=1&limit=20", API_BASE_URL);
@@ -14,7 +16,9 @@ export async function GET() {
       headers: {
         Accept: "application/json",
       },
-      cache: "no-store",
+      next: {
+        revalidate: 3600,
+      },
     });
 
     if (!res.ok) {
@@ -28,7 +32,6 @@ export async function GET() {
     }
 
     const json = await res.json();
-
     const list = Array.isArray(json) ? json : json.data ?? json.items ?? [];
 
     if (!Array.isArray(list)) {
@@ -46,7 +49,11 @@ export async function GET() {
         imageUrl: item.foto,
       }));
 
-    return NextResponse.json(mapped);
+    return NextResponse.json(mapped, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    });
   } catch (error) {
     console.error("GET latest activity error:", error);
     return NextResponse.json(
