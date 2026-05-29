@@ -1,13 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
-const LatestMagazinePreview = dynamic(
-  () => import("./LatestMagazinePreview"),
-  { ssr: false }
-);
+function isSafeImageUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return false;
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    return value.startsWith("/");
+  }
+}
 
 export default function LatestMagazineSection() {
   const [magazine, setMagazine] = useState(null);
@@ -25,7 +31,6 @@ export default function LatestMagazineSection() {
           headers: {
             Accept: "application/json",
           },
-          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -51,9 +56,11 @@ export default function LatestMagazineSection() {
         setMagazine({
           id: data.id,
           title: data.title.trim(),
+          coverUrl: isSafeImageUrl(data.coverUrl) ? data.coverUrl : null,
         });
       } catch (error) {
         console.error("Gagal mengambil data latest magazine:", error);
+        setMagazine(null);
       } finally {
         if (isMounted) {
           setIsLoading(false);
@@ -104,7 +111,19 @@ export default function LatestMagazineSection() {
           <>
             <div className="utama-magazine__cover">
               <div className="utama-magazine__cover-inner">
-                <LatestMagazinePreview id={magazine.id} />
+                {magazine.coverUrl ? (
+                  <Image
+                    src={magazine.coverUrl}
+                    alt={`Cover majalah ${magazine.title}`}
+                    width={250}
+                    height={350}
+                    className="utama-magazine__cover-image"
+                    sizes="250px"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="utama-magazine__loading-cover" />
+                )}
               </div>
             </div>
 
@@ -124,7 +143,7 @@ export default function LatestMagazineSection() {
                 </Link>
 
                 <Link
-                  href="/keanggotaan"
+                  href={`/api/magazines/${magazine.id}/file`}
                   className="utama-magazine__button utama-magazine__button--download"
                 >
                   Download Majalah
