@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const revalidate = 3600;
+
 export async function GET(req, context) {
   try {
     const apiBase = process.env.API_MAGAZINE_BASE_URL;
@@ -21,7 +23,9 @@ export async function GET(req, context) {
     }
 
     const detailRes = await fetch(`${apiBase}/api/magazines/${id}`, {
-      cache: "no-store",
+      next: {
+        revalidate: 3600,
+      },
       headers: {
         Accept: "application/json",
       },
@@ -29,6 +33,7 @@ export async function GET(req, context) {
 
     if (!detailRes.ok) {
       const text = await detailRes.text();
+
       return new NextResponse(text, {
         status: detailRes.status,
         headers: {
@@ -52,7 +57,9 @@ export async function GET(req, context) {
       : `${apiBase}${pdfPath.startsWith("/") ? pdfPath : `/${pdfPath}`}`;
 
     const fileRes = await fetch(fileUrl, {
-      cache: "no-store",
+      next: {
+        revalidate: 3600,
+      },
     });
 
     if (!fileRes.ok) {
@@ -70,11 +77,12 @@ export async function GET(req, context) {
       headers: {
         "Content-Type": contentType,
         "Content-Disposition": `inline; filename="magazine-${id}.pdf"`,
-        "Cache-Control": "no-store",
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
   } catch (error) {
     console.error("Proxy magazine file error:", error);
+
     return NextResponse.json(
       { message: "Tidak dapat mengambil file PDF magazine" },
       { status: 500 }
