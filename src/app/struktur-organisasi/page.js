@@ -2,6 +2,8 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import KartuAnggota from "../../components/KartuAnggota";
 import JsonLd from "@/components/JsonLd";
+import LazyRenderSection from "../../components/LazyRenderSection";
+
 
 export const metadata = {
   title: "Struktur Organisasi KOPMA UNNES – Pengurus & Pengawas 2025",
@@ -211,10 +213,11 @@ export default function StrukturOrganisasiPage() {
               KOPMA UNNES Tahun 2025
             </h1>
           </div>
-
           <div className="so-kontainer">
             {strukturOrganisasi.map((bidang) => (
-              <SeksiBidang key={bidang.id} judul={bidang.judul} baris={bidang.baris} />
+              <LazyRenderSection key={bidang.id} minHeight={600}>
+                <SeksiBidang judul={bidang.judul} baris={bidang.baris} />
+              </LazyRenderSection>
             ))}
           </div>
         </section>
