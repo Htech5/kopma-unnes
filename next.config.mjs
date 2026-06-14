@@ -5,7 +5,9 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   output: "standalone",
-
+  experimental: {
+    turbopack: false,
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     dangerouslyAllowLocalIP: true,
@@ -28,7 +30,6 @@ const nextConfig = {
       },
     ],
   },
-
   async headers() {
     return [
       {
@@ -68,14 +69,11 @@ const nextConfig = {
       },
     ];
   },
-
   async redirects() {
     return [];
   },
-
   async rewrites() {
     return [];
   },
 };
-
 export default nextConfig;
