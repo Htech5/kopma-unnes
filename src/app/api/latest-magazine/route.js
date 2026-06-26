@@ -1,21 +1,18 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
-function buildFileUrl(apiBase, path) {
+function buildFileUrl(apiBase: string, path: string | null | undefined): string | null {
   if (!path || typeof path !== "string") return null;
-
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
-
   return `${apiBase}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
 export async function GET() {
   try {
     const apiBase = process.env.API_MAGAZINE_BASE_URL;
-
     if (!apiBase) {
       return NextResponse.json(
         { message: "API_MAGAZINE_BASE_URL belum diset" },
@@ -24,9 +21,6 @@ export async function GET() {
     }
 
     const res = await fetch(`${apiBase}/api/magazines`, {
-      next: {
-        revalidate: 3600,
-      },
       headers: {
         Accept: "application/json",
       },
@@ -34,7 +28,6 @@ export async function GET() {
 
     if (!res.ok) {
       const text = await res.text();
-
       return new NextResponse(text, {
         status: res.status,
         headers: {
@@ -53,7 +46,6 @@ export async function GET() {
     }
 
     const latest = magazines[0];
-
     const coverPath =
       latest.cover_image ||
       latest.coverImage ||
@@ -78,7 +70,6 @@ export async function GET() {
     );
   } catch (error) {
     console.error("Latest magazine proxy error:", error);
-
     return NextResponse.json(
       { message: "Gagal mengambil latest magazine" },
       { status: 500 }
