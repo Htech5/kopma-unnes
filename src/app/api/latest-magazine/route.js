@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-function buildFileUrl(apiBase: string, path: string | null | undefined): string | null {
+function buildFileUrl(apiBase, path) {
   if (!path || typeof path !== "string") return null;
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
