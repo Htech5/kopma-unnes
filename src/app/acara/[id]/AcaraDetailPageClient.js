@@ -6,8 +6,14 @@ import Footer from "../../../components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import CommentSection from "../../../components/CommentSection";
+import DOMPurify from "isomorphic-dompurify";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+
+const SANITIZE_OPTS = {
+  ALLOWED_TAGS: ["p", "br", "b", "i", "strong", "em", "u", "ul", "ol", "li", "a", "h2", "h3", "h4", "blockquote", "img", "span"],
+  ALLOWED_ATTR: ["href", "src", "alt", "title", "target", "rel"],
+};
 
 function DetailSkeleton() {
   return (
@@ -128,7 +134,7 @@ export default function AcaraDetailPageClient({ id }) {
 
                   <div
                     className="acara-detail__body"
-                    dangerouslySetInnerHTML={{ __html: article.isi }}
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.isi || "", SANITIZE_OPTS) }}
                   />
 
                   <nav

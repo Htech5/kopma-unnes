@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { validateUpload } from "@/lib/upload";
 
 export const revalidate = 3600;
 
@@ -40,7 +41,6 @@ export async function GET(_, context) {
     return NextResponse.json(
       {
         message: "Proxy gagal mengambil detail inventaris",
-        detail: error?.message || "Unknown error",
       },
       { status: 500 }
     );
@@ -56,6 +56,12 @@ export async function PUT(request, context) {
   try {
     const { id } = await context.params;
     const formData = await request.formData();
+
+    const uploadError = validateUpload(formData);
+    if (uploadError) {
+      clearTimeout(timeout);
+      return NextResponse.json({ message: uploadError }, { status: 400 });
+    }
 
     const backendRes = await fetch(`${BACKEND_URL}/api/inventaris/${id}`, {
       method: "PUT",
@@ -79,7 +85,6 @@ export async function PUT(request, context) {
     return NextResponse.json(
       {
         message: "Proxy gagal memperbarui inventaris",
-        detail: error?.message || "Unknown error",
       },
       { status: 500 }
     );
@@ -119,7 +124,6 @@ export async function DELETE(_, context) {
     return NextResponse.json(
       {
         message: "Proxy gagal menghapus inventaris",
-        detail: error?.message || "Unknown error",
       },
       { status: 500 }
     );

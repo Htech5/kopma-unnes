@@ -30,7 +30,6 @@ export async function PATCH(request) {
     return NextResponse.json(
       {
         message: "Proxy gagal reject komentar",
-        detail: error?.message || "Unknown error",
       },
       { status: 500 }
     );

@@ -28,7 +28,6 @@ export async function GET(_, context) {
     return NextResponse.json(
       {
         message: "Proxy gagal mengambil detail komentar",
-        detail: error?.message || "Unknown error",
       },
       { status: 500 }
     );
@@ -61,7 +60,6 @@ export async function DELETE(_, context) {
     return NextResponse.json(
       {
         message: "Proxy gagal menghapus komentar",
-        detail: error?.message || "Unknown error",
       },
       { status: 500 }
     );

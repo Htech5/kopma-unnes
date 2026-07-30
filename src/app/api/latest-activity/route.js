@@ -59,7 +59,6 @@ export async function GET() {
     return NextResponse.json(
       {
         message: "Gagal mengambil latest activity",
-        detail: error?.message || "Unknown error",
       },
       { status: 500 }
     );
