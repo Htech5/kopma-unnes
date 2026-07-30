@@ -59,7 +59,7 @@ const nextConfig = {
               // 'unsafe-inline' masih diperlukan Next runtime; 'unsafe-eval' dibuang.
               "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob: https://api.ukmkopmaunnes.com https://ukmkopmaunnes.com",
+              "img-src 'self' data: blob: https://api.ukmkopmaunnes.com https://ukmkopmaunnes.com https://*.public.blob.vercel-storage.com",
               "font-src 'self' data:",
               "connect-src 'self' https://api.ukmkopmaunnes.com https://ukmkopmaunnes.com",
               "frame-src 'self'",

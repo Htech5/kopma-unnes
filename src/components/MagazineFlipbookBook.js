@@ -7,6 +7,13 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 
+// Worker versi-terpasang (selalu cocok dengan pdfjs-dist), di-set sebelum render
+// pertama agar tidak race dengan <Document>.
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
+
 export default function MagazineFlipbookBook({ pdfUrl }) {
   const [numPages, setNumPages] = useState(0);
   const [currentSpread, setCurrentSpread] = useState(0);
@@ -15,10 +22,6 @@ export default function MagazineFlipbookBook({ pdfUrl }) {
   const [loadError, setLoadError] = useState("");
 
   const flipBookRef = useRef(null);
-
-  useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-  }, []);
 
   useEffect(() => {
     setNumPages(0);
