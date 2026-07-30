@@ -9,6 +9,9 @@ const nextConfig = {
     turbopack: false,
   },
   images: {
+    // ponytail: /_next/image is 403 on the LiteSpeed host (WAF blocks the route).
+    // Serve originals directly; drop this once the host allows /_next/image.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     dangerouslyAllowLocalIP: true,
     remotePatterns: [

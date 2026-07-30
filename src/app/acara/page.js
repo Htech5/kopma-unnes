@@ -19,7 +19,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "https://ukmkopmaunnes.com/images/BANGUNGAN.png",
+        url: "https://ukmkopmaunnes.com/images/BANGUNGAN.jpg",
         width: 1200,
         height: 630,
         alt: "Acara dan Kegiatan KOPMA UNNES",
@@ -31,7 +31,7 @@ export const metadata = {
     title: "Acara KOPMA UNNES – Kegiatan Terbaru",
     description:
       "Ikuti berbagai acara dan event resmi KOPMA UNNES di kampus Universitas Negeri Semarang.",
-    images: ["https://ukmkopmaunnes.com/images/BANGUNGAN.png"],
+    images: ["https://ukmkopmaunnes.com/images/BANGUNGAN.jpg"],
   },
   alternates: {
     canonical: "https://ukmkopmaunnes.com/acara",

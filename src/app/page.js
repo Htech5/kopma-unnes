@@ -29,7 +29,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "https://ukmkopmaunnes.com/images/BANGUNGAN.webp",
+        url: "https://ukmkopmaunnes.com/images/BANGUNGAN.jpg",
         width: 1200,
         height: 630,
         alt: "Gedung KOPMA UNNES – Koperasi Mahasiswa Universitas Negeri Semarang",
@@ -41,7 +41,7 @@ export const metadata = {
     title: "KOPMA UNNES – Koperasi Mahasiswa Universitas Negeri Semarang",
     description:
       "KOPMA UNNES melayani mahasiswa UNNES melalui berbagai unit usaha: KOPMART, Counter JNE, Toga Wisuda, dan lebih banyak lagi.",
-    images: ["https://ukmkopmaunnes.com/images/BANGUNGAN.webp"],
+    images: ["https://ukmkopmaunnes.com/images/BANGUNGAN.jpg"],
   },
   alternates: {
     canonical: "https://ukmkopmaunnes.com",
@@ -104,7 +104,7 @@ export default function HomePage() {
         <section className="utama-shared" aria-labelledby="utama-hero-title">
           <div className="utama-shared__background" aria-hidden="true">
             <Image
-              src="/images/BANGUNGAN.webp"
+              src="/images/BANGUNGAN.jpg"
               alt=""
               fill
               priority
@@ -142,7 +142,7 @@ export default function HomePage() {
               <div className="utama-hero__visual" aria-hidden="true">
                 <div className="utama-hero__maskot">
                   <Image
-                    src="/images/MASKOT.webp"
+                    src="/images/MASKOT.png"
                     alt=""
                     fill
                     sizes="(max-width: 992px) 250px, 360px"
