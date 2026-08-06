@@ -7,6 +7,12 @@ const nextConfig = {
   output: "standalone",
   experimental: {
     turbopack: false,
+    // ponytail: shared hosting — os.cpus() melaporkan core mesin fisik (puluhan),
+    // jadi Next fork puluhan worker dan menabrak limit 120 proses akun.
+    // Naikkan ke 2-4 kalau build jadi kelamaan dan limit masih longgar.
+    cpus: 1,
+    workerThreads: false,
+    memoryBasedWorkersCount: false,
   },
   images: {
     // ponytail: /_next/image is 403 on the LiteSpeed host (WAF blocks the route).
