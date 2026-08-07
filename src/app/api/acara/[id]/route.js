@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const revalidate = 3600;
+
 function buildImageUrl(apiBase, path) {
   if (!path || typeof path !== "string") return null;
   if (/^https?:\/\//i.test(path)) return path;
@@ -24,7 +26,7 @@ export async function GET(_, context) {
     const { id } = await context.params;
 
     const detailRes = await fetch(`${apiBase}/api/events/${id}`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
       headers: {
         Accept: "application/json",
       },
@@ -41,7 +43,7 @@ export async function GET(_, context) {
     const article = await detailRes.json();
 
     const listRes = await fetch(`${apiBase}/api/events`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
       headers: {
         Accept: "application/json",
       },
@@ -88,11 +90,18 @@ export async function GET(_, context) {
       category_id: article.category_id,
     };
 
-    return NextResponse.json({
-      article: mappedArticle,
-      prev,
-      next,
-    });
+    return NextResponse.json(
+      {
+        article: mappedArticle,
+        prev,
+        next,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      }
+    );
   } catch (error) {
     console.error("Proxy acara detail error:", error);
     return NextResponse.json(

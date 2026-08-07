@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const revalidate = 3600;
+
 function buildImageUrl(apiBase, path) {
   if (!path || typeof path !== "string") return null;
   if (/^https?:\/\//i.test(path)) return path;
@@ -26,7 +28,7 @@ export async function GET(request) {
     const limit = Number(searchParams.get("limit") || "6");
 
     const res = await fetch(`${apiBase}/api/events`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
       headers: {
         Accept: "application/json",
       },
@@ -73,13 +75,20 @@ export async function GET(request) {
     const end = start + limit;
     const items = mapped.slice(start, end);
 
-    return NextResponse.json({
-      data: items,
-      total,
-      totalPages: Math.max(1, Math.ceil(total / limit)),
-      page,
-      limit,
-    });
+    return NextResponse.json(
+      {
+        data: items,
+        total,
+        totalPages: Math.max(1, Math.ceil(total / limit)),
+        page,
+        limit,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      }
+    );
   } catch (error) {
     console.error("Proxy acara list error:", error);
     return NextResponse.json(

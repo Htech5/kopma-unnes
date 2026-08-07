@@ -20,9 +20,11 @@ function buildTargetUrl(request) {
 
 export async function GET(request) {
   try {
+    // ponytail: 60 detik, bukan 3600 seperti route lain — komentar baru yang
+    // baru di-approve harus cepat muncul. Naikkan kalau backend masih berat.
     const backendRes = await fetch(buildTargetUrl(request), {
       method: "GET",
-      cache: "no-store",
+      next: { revalidate: 60 },
       headers: {
         Accept: "application/json",
       },
@@ -35,6 +37,7 @@ export async function GET(request) {
       headers: {
         "Content-Type":
           backendRes.headers.get("content-type") || "application/json",
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
       },
     });
   } catch (error) {
