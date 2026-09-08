@@ -147,7 +147,6 @@ export default function AcaraPageClient() {
 
     try {
       const res = await fetch(`${API_URL}/api/acara?page=${p}&limit=${PER_PAGE}`, {
-        cache: "no-store",
         headers: { Accept: "application/json" },
       });
 

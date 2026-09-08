@@ -98,16 +98,18 @@ function buildFileUrl(path) {
   return `${cleanBase}${cleanPath}`;
 }
 
+const MAX_RETRY = 3;
+const RETRY_DELAY_MS = 5000;
+
 export default function MagazineSection() {
   const [magazines, setMagazines] = useState([]);
   const [status, setStatus] = useState("loading");
 
-  const load = useCallback(async (signal) => {
+  const load = useCallback(async (signal, attempt = 0) => {
     try {
       setStatus("loading");
 
       const res = await fetch("/api/magazines", {
-        cache: "no-store",
         headers: { Accept: "application/json" },
         signal,
       });
@@ -137,11 +139,18 @@ export default function MagazineSection() {
 
       console.error("[MagazineSection] Gagal memuat:", err);
 
-      if (!signal.aborted) {
+      if (signal.aborted) return;
+
+      // ponytail: 3 percobaan + backoff; sebelumnya retry tanpa batas tiap 5s
+      // yang bikin backend kena 429 dan UI nyangkut di loading selamanya.
+      if (attempt < MAX_RETRY) {
         setTimeout(() => {
-          if (!signal.aborted) load(signal);
-        }, 5000);
+          if (!signal.aborted) load(signal, attempt + 1);
+        }, RETRY_DELAY_MS * 2 ** attempt);
+        return;
       }
+
+      setStatus("error");
     }
   }, []);
 
@@ -165,6 +174,12 @@ export default function MagazineSection() {
 
       <div className="mag-section__body">
         {status === "loading" && <MagazineLoading />}
+
+        {status === "error" && (
+          <div className="mag-section__empty" role="alert">
+            <p>Gagal memuat majalah. Coba lagi beberapa saat.</p>
+          </div>
+        )}
 
         {status === "success" && magazines.length === 0 && (
           <div className="mag-section__empty" role="status">

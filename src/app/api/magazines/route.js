@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const revalidate = 3600;
+
 export async function GET() {
   try {
     const apiBase = process.env.API_MAGAZINE_BASE_URL;
@@ -12,7 +14,7 @@ export async function GET() {
     }
 
     const res = await fetch(`${apiBase}/api/magazines`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
       headers: {
         Accept: "application/json",
       },
@@ -24,6 +26,7 @@ export async function GET() {
       status: res.status,
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
   } catch (error) {
