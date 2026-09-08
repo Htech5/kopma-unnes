@@ -2,6 +2,9 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import MagazineSectionWrapper from "./MagazineSectionWrapper";
 import JsonLd from "@/components/JsonLd";
+import { getMagazines } from "@/lib/data";
+
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Keanggotaan KOPMA UNNES – Daftar & Info Anggota Koperasi Mahasiswa",
@@ -64,13 +67,21 @@ const keanggotaanSchema = {
   },
 };
 
-export default function KeanggotaanPage() {
+export default async function KeanggotaanPage() {
+  let magazines = [];
+
+  try {
+    magazines = await getMagazines();
+  } catch (error) {
+    console.error("[KeanggotaanPage] gagal memuat majalah:", error);
+  }
+
   return (
     <>
       <JsonLd data={keanggotaanSchema} />
       <Navbar />
       <main className="so-page magazine-page keanggotaan-page--flush" id="main-content">
-        <MagazineSectionWrapper />
+        <MagazineSectionWrapper initialMagazines={magazines} />
       </main>
       <Footer />
     </>

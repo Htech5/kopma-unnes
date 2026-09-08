@@ -101,9 +101,21 @@ function buildFileUrl(path) {
 const MAX_RETRY = 3;
 const RETRY_DELAY_MS = 5000;
 
-export default function MagazineSection() {
-  const [magazines, setMagazines] = useState([]);
-  const [status, setStatus] = useState("loading");
+function normalize(rows) {
+  return rows.map((item) => ({
+    id: item.id,
+    title: item.year ? `${item.title} ${item.year}` : item.title,
+    subtitle: item.year ? String(item.year) : "",
+    previewImage: null,
+    pdfUrl: buildFileUrl(item.pdf_file),
+  }));
+}
+
+export default function MagazineSection({ initialMagazines = [] }) {
+  const [magazines, setMagazines] = useState(() => normalize(initialMagazines));
+  const [status, setStatus] = useState(
+    initialMagazines.length > 0 ? "success" : "loading"
+  );
 
   const load = useCallback(async (signal, attempt = 0) => {
     try {
@@ -124,15 +136,7 @@ export default function MagazineSection() {
         throw new Error("Format data tidak valid.");
       }
 
-      const normalized = data.map((item) => ({
-        id: item.id,
-        title: item.year ? `${item.title} ${item.year}` : item.title,
-        subtitle: item.year ? String(item.year) : "",
-        previewImage: null,
-        pdfUrl: buildFileUrl(item.pdf_file),
-      }));
-
-      setMagazines(normalized);
+      setMagazines(normalize(data));
       setStatus("success");
     } catch (err) {
       if (err.name === "AbortError") return;
@@ -155,11 +159,14 @@ export default function MagazineSection() {
   }, []);
 
   useEffect(() => {
+    // Sudah di-render dari server; lewati fetch dari browser.
+    if (initialMagazines.length > 0) return;
+
     const controller = new AbortController();
     load(controller.signal);
 
     return () => controller.abort();
-  }, [load]);
+  }, [load, initialMagazines.length]);
 
   return (
     <section

@@ -21,13 +21,18 @@ function safeNumber(val) {
   return Number.isFinite(n) ? n : "—";
 }
 
-export default function InventarisClient() {
-  const [items, setItems] = useState([]);
-  const [status, setStatus] = useState("loading");
+export default function InventarisClient({ initialItems = [] }) {
+  const [items, setItems] = useState(initialItems);
+  const [status, setStatus] = useState(
+    initialItems.length > 0 ? "success" : "loading"
+  );
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
+    // Data sudah datang dari server render; tidak perlu fetch dari browser.
+    if (initialItems.length > 0) return;
+
     const cached = sessionStorage.getItem(STORAGE_KEY);
 
     if (cached) {
@@ -77,7 +82,7 @@ export default function InventarisClient() {
     load();
 
     return () => controller.abort();
-  }, []);
+  }, [initialItems.length]);
 
   const totalItems = items.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));

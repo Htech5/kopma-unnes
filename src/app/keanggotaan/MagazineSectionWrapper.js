@@ -6,6 +6,6 @@ const MagazineSection = dynamic(
   { ssr: false }
 );
 
-export default function MagazineSectionWrapper() {
-  return <MagazineSection />;
+export default function MagazineSectionWrapper({ initialMagazines }) {
+  return <MagazineSection initialMagazines={initialMagazines} />;
 }

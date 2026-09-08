@@ -1,6 +1,7 @@
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import InventarisClient from "./InventarisClient";
+import { getInventaris } from "@/lib/data";
 
 export const revalidate = 3600;
 
@@ -43,7 +44,15 @@ export const metadata = {
   },
 };
 
-export default function InventarisPage() {
+export default async function InventarisPage() {
+  let items = [];
+
+  try {
+    items = await getInventaris();
+  } catch (error) {
+    console.error("[InventarisPage] gagal memuat data awal:", error);
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -72,7 +81,7 @@ export default function InventarisPage() {
       />
       <Navbar />
       <main className="inventaris-page keanggotaan-page--flush">
-        <InventarisClient />
+        <InventarisClient initialItems={items} />
       </main>
       <Footer />
     </>

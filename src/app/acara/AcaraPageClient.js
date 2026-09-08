@@ -1,7 +1,7 @@
 "use client";
 
 import JsonLd from "@/components/JsonLd";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import Link from "next/link";
@@ -77,21 +77,6 @@ function toImageUrl(path = "") {
   return `${API_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
-function SkeletonCard() {
-  return (
-    <div className="acara-card acara-card--skeleton" aria-hidden="true">
-      <div className="acara-card__img-wrap acara-card__img-wrap--skel" />
-      <div className="acara-card__body">
-        <div className="acara-skel-line acara-skel-line--h" />
-        <div className="acara-skel-line acara-skel-line--h acara-skel-line--70" />
-        <div className="acara-skel-line" style={{ marginTop: 6 }} />
-        <div className="acara-skel-line" />
-        <div className="acara-skel-line acara-skel-line--60" />
-      </div>
-    </div>
-  );
-}
-
 function EmptyState() {
   return (
     <div className="acara-state acara-state--empty">
@@ -136,43 +121,15 @@ function AcaraCard({ item }) {
   );
 }
 
-export default function AcaraPageClient() {
-  const [items, setItems] = useState([]);
-  const [status, setStatus] = useState("loading");
+export default function AcaraPageClient({ items = [], failed = false }) {
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
-  const load = useCallback(async (p) => {
-    setStatus("loading");
+  const totalPages = Math.max(1, Math.ceil(items.length / PER_PAGE));
 
-    try {
-      const res = await fetch(`${API_URL}/api/acara?page=${p}&limit=${PER_PAGE}`, {
-        headers: { Accept: "application/json" },
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-      }
-
-      const json = await res.json();
-
-      const list = Array.isArray(json) ? json : json.data ?? json.items ?? [];
-      const total =
-        json.totalPages ??
-        (json.total ? Math.ceil(json.total / PER_PAGE) : 1);
-
-      setItems(list);
-      setTotalPages(total);
-      setStatus("success");
-    } catch (err) {
-      console.error("[AcaraPage] fetch error:", err);
-      setStatus("error");
-    }
-  }, []);
-
-  useEffect(() => {
-    load(page);
-  }, [load, page]);
+  const pageItems = useMemo(
+    () => items.slice((page - 1) * PER_PAGE, page * PER_PAGE),
+    [items, page]
+  );
 
   const goTo = (n) => {
     if (n < 1 || n > totalPages) return;
@@ -192,20 +149,12 @@ export default function AcaraPageClient() {
               <h1 className="acara-section__heading">Acara Kopma Unnes</h1>
             </header>
 
-            {status === "success" && items.length === 0 && <EmptyState />}
+            {items.length === 0 && !failed && <EmptyState />}
 
-            {status === "loading" && (
-              <div className="acara-grid">
-                {Array.from({ length: PER_PAGE }).map((_, i) => (
-                  <SkeletonCard key={i} />
-                ))}
-              </div>
-            )}
-
-            {status === "success" && items.length > 0 && (
+            {items.length > 0 && (
               <>
                 <div className="acara-grid">
-                  {items.map((item) => (
+                  {pageItems.map((item) => (
                     <AcaraCard key={item.id} item={item} />
                   ))}
                 </div>
@@ -249,7 +198,7 @@ export default function AcaraPageClient() {
               </>
             )}
 
-            {status === "error" && (
+            {failed && (
               <div className="acara-state acara-state--error">
                 <span className="acara-state__icon">⚠️</span>
                 <p className="acara-state__msg">Gagal memuat acara.</p>

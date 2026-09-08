@@ -1,4 +1,7 @@
 import AcaraPageClient from "./AcaraPageClient";
+import { getAcaraAll } from "@/lib/data";
+
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Acara KOPMA UNNES – Kegiatan & Event Koperasi Mahasiswa UNNES",
@@ -38,6 +41,16 @@ export const metadata = {
   },
 };
 
-export default function AcaraPage() {
-  return <AcaraPageClient />;
+export default async function AcaraPage() {
+  let items = [];
+  let failed = false;
+
+  try {
+    items = await getAcaraAll();
+  } catch (error) {
+    console.error("[AcaraPage] gagal memuat data awal:", error);
+    failed = true;
+  }
+
+  return <AcaraPageClient items={items} failed={failed} />;
 }
