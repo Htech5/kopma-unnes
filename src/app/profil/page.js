@@ -64,10 +64,10 @@ const videoSchema = {
   name: "Video Profil KOPMA UNNES 2025",
   description:
     "Video profil resmi KOPMA UNNES tahun 2025, menampilkan sejarah, visi misi, dan unit usaha Koperasi Mahasiswa Universitas Negeri Semarang.",
-  thumbnailUrl: "https://img.youtube.com/vi/MvR_LSEqV4U/maxresdefault.jpg",
+  thumbnailUrl: "https://img.youtube.com/vi/6NXvauSRlcM/maxresdefault.jpg",
   uploadDate: "2025-01-01",
-  embedUrl: "https://www.youtube.com/embed/MvR_LSEqV4U",
-  contentUrl: "https://www.youtube.com/watch?v=MvR_LSEqV4U",
+  embedUrl: "https://www.youtube.com/embed/6NXvauSRlcM",
+  contentUrl: "https://www.youtube.com/watch?v=6NXvauSRlcM",
   publisher: {
     "@type": "Organization",
     name: "KOPMA UNNES",

@@ -4,7 +4,7 @@
 
 import Image from "next/image";
 
-const YOUTUBE_ID = "MvR_LSEqV4U";
+const YOUTUBE_ID = "6NXvauSRlcM";
 
 export default function ProfilClient() {
   return (

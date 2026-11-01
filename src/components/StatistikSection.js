@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const statsData = [
   {
-    value: 265,
+    value: 352,
     label: "Anggota",
   },
   {
