@@ -6,7 +6,6 @@ const nextConfig = {
   compress: true,
   output: "standalone",
   experimental: {
-    turbopack: false,
     // ponytail: shared hosting — os.cpus() melaporkan core mesin fisik (puluhan),
     // jadi Next fork puluhan worker dan menabrak limit 120 proses akun.
     // Naikkan ke 2-4 kalau build jadi kelamaan dan limit masih longgar.
@@ -68,7 +67,7 @@ const nextConfig = {
               "img-src 'self' data: blob: https://api.ukmkopmaunnes.com https://ukmkopmaunnes.com https://*.public.blob.vercel-storage.com",
               "font-src 'self' data:",
               "connect-src 'self' https://api.ukmkopmaunnes.com https://ukmkopmaunnes.com",
-              "frame-src 'self'",
+              "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
               "media-src 'self' data: blob:",
               "object-src 'none'",
               "base-uri 'self'",
